@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidRules.iml" filepath="$PROJECT_DIR$/AndroidRules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androjena-module/androjena-module.iml" filepath="$PROJECT_DIR$/androjena-module/androjena-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arqoid-module/arqoid-module.iml" filepath="$PROJECT_DIR$/arqoid-module/arqoid-module.iml" />
+    </modules>
+  </component>
+</project>

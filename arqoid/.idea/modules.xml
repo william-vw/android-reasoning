@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/androjena-module/androjena-module.iml" filepath="$PROJECT_DIR$/androjena-module/androjena-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arqoid.iml" filepath="$PROJECT_DIR$/arqoid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arqoid-module/arqoid-module.iml" filepath="$PROJECT_DIR$/arqoid-module/arqoid-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lucenoid-module/lucenoid-module.iml" filepath="$PROJECT_DIR$/lucenoid-module/lucenoid-module.iml" />
+    </modules>
+  </component>
+</project>
