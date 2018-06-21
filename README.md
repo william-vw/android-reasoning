@@ -6,3 +6,5 @@ The repository contains separate modules for the AndroJena, ARQoid and Lucenoid 
 The project was created to be usable out-of-the-box - just point Android Studio towards the project folder (File > Open...) and select the AndroidRules project.
 
 In case of issues, try File > Invalidate Caches / Restart > Invalidate and Restart. After starting, clean the project (Build > Clean Project) and re-sync (File > Sync Project with Gradle Files).
+
+See <a href="http://www.linkeddata.mobi/software/owl2-rl-on-android/">here</a> for more info.
