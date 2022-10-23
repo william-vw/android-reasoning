@@ -31,7 +31,7 @@ public class LocalReasonActivity extends AppCompatActivity {
         setContentView( R.layout.activity_local_reason);
 
         final Model model = setup();
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.pizzaButton).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

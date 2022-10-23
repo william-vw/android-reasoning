@@ -1,12 +1,14 @@
 package wvw.mobile.rules;
 
 import android.content.res.AssetManager;
-import android.icu.util.Output;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,7 +16,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -24,8 +25,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -45,36 +44,19 @@ public class RemoteReasonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_remote_reason);
 
-        binding = ActivityRemoteReasonBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        findViewById(R.id.remoteButton).setOnClickListener(new View.OnClickListener() {
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_remote_reason);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                try {
+                    reason();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-        try {
-            reason();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_remote_reason);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 
     public void reason() throws Exception {
@@ -106,12 +88,47 @@ public class RemoteReasonActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 String response = sendPost("http://ppr.cs.dal.ca:3002/n3", postStr);
-                handler.post(() -> Log.d("android-rules", "response? " + response));
+                handler.post(() -> {
+                    try {
+                        Log.d("android-rules", "response? " + response);
+
+                        JSONObject obj = new JSONObject(response);
+                        String html = obj.getString("success");
+                        html = cleanupHtml(html);
+
+                        WebView wv = findViewById(R.id.remoteOutput);
+                        wv.loadData(html, "text/html", "UTF-8");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    private String cleanupHtml(String html) {
+        html = removeInterval("<div class='ruleInfo'>", "</div></div>", html);
+        html = removeInterval("<div class='source'>", "</div>", html);
+        html = removeInterval("<span class='showHideRule'>", "</span>", html);
+
+        html = html.replace("\\\"", "\"");
+        return html;
+    }
+
+    private String removeInterval(String startTag, String endTag, String html) {
+        while (html.indexOf(startTag) != -1) {
+            int stIdx = html.indexOf(startTag);
+            int endIdx = html.indexOf(endTag, stIdx);
+
+            html = html.substring(0, stIdx) +
+                    html.substring(endIdx + endTag.length());
+        }
+
+        return html;
     }
 
     // create Model & load data
@@ -164,7 +181,7 @@ public class RemoteReasonActivity extends AppCompatActivity {
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             ret = readString(in);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e("android-rules", e.getMessage());
         }
 
