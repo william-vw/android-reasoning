@@ -1,0 +1,64 @@
+@prefix : <http://wvw.example.com#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+
+# Recommendation & Outcomes
+
+:loseWeight
+	rdfs:label "Lose weight." ;
+	:scientificExplanation "Higher rheumatoid arthritis disease activity and disability have been observed in obese patients. [Vidal et al., J Rheumatol., 2015. DOI: 10.3899/jrheum.150224]. Negative influence of obesity has been observed on arthritis drug therapies. [Moroni et al., Clin Rheumatol. 2020. DOI: 10.1007/s10067-020-04963-2]." ;
+	:counterfactualExplanation "Lower weight could help improve RA disease activity and disability." .
+
+# Global Health Assessment (GH)
+{
+	?p :hasGhVasValue ?v . ?v math:greaterThan 0 . ?v math:lessThan 100 .
+} => {
+	?p :hasGhVas :Low .
+} .
+
+# BMI Classification (adopted from WHO)
+{
+	?p :bmiValue ?v . ?v math:notGreaterThen 18.5 .
+} => {
+	?p :hasBmiClass :Underweight .
+} .
+
+{
+	?p :bmiValue ?v . ?v math:greaterThan 18.5 . ?v math:lessThan 25 .
+} => {
+	?p :hasBmiClass :NormalWeight .
+} .
+
+{
+	?p :bmiValue ?v . ?v math:greaterThan 24.9 . ?v math:lessThan 30 .
+} => {
+	?p :hasBmiClass :Overweight .
+} .
+
+{
+	?p :bmiValue ?v . ?v math:greaterThan 29.9 . ?v math:lessThan 35 .
+} => {
+	?p :hasBmiClass :Class1Obesity .
+} .
+
+{
+	?p :bmiValue ?v . ?v math:greaterThan 34.9 . ?v math:lessThan 40 .
+} => {
+	?p :hasBmiClass :Class2Obesity .
+} .
+
+{
+	?p :bmiValue ?v . ?v math:greaterThan 39.9 .
+} => {
+	?p :hasBmiClass :Class3Obesity .
+} .
+
+# Recommendation Rules
+
+# Rec3
+{
+	?p :hasBmiClass :Class1Obesity .
+} => {
+	?p :recommendation :loseWeight .
+} .
+

@@ -2,7 +2,7 @@ package wvw.mobile.rules;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -23,12 +23,12 @@ import java.util.List;
 import wvw.utils.IOUtils;
 import wvw.utils.wvw.utils.rdf.Namespaces;
 
-public class MainActivity extends AppCompatActivity {
+public class LocalReasonActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView( R.layout.activity_local_reason);
 
         final Model model = setup();
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
