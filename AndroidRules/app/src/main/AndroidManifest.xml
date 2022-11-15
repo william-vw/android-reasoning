@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".WebviewReasonActivity"
+            android:name=".eyebrow.WebviewReasonActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
