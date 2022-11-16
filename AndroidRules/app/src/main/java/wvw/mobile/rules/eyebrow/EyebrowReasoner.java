@@ -34,7 +34,7 @@ public class EyebrowReasoner implements Reasoner {
             }
         });
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://10.200.86.40:8000/run.html");
+        webView.loadUrl("http://10.200.82.217:8000/run.html");
 //        webView.loadUrl("file:///android_asset/eyebrow/run.html");
     }
 
