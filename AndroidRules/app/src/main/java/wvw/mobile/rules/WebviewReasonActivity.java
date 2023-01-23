@@ -1,4 +1,4 @@
-package wvw.mobile.rules.eyebrow;
+package wvw.mobile.rules;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,11 @@ import android.util.Log;
 import android.webkit.WebView;
 
 import wvw.mobile.rules.R;
+import wvw.mobile.rules.eye_js.EyeJsReasoner;
+import wvw.mobile.rules.eyebrow.EyebrowReasoner;
+import wvw.mobile.rules.eyebrow.ReasonCmd;
+import wvw.mobile.rules.eyebrow.Reasoner;
+import wvw.mobile.rules.eyebrow.ReasonerListener;
 
 public class WebviewReasonActivity extends AppCompatActivity implements ReasonerListener {
 
@@ -16,7 +21,7 @@ public class WebviewReasonActivity extends AppCompatActivity implements Reasoner
         setContentView(R.layout.activity_webview_reason);
 
         WebView webView = (WebView) findViewById(R.id.webview);
-        Reasoner reasoner = new EyebrowReasoner(webView, this);
+        Reasoner reasoner = new EyeJsReasoner(webView, this);
 
         String rdf =
                 "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>." +

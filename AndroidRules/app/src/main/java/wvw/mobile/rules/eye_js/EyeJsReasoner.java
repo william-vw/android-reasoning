@@ -1,4 +1,4 @@
-package wvw.mobile.rules.eyebrow;
+package wvw.mobile.rules.eye_js;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,8 +11,11 @@ import android.webkit.WebViewClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import wvw.mobile.rules.eyebrow.ReasonCmd;
+import wvw.mobile.rules.eyebrow.Reasoner;
 
-public class EyebrowReasoner implements Reasoner {
+public class EyeJsReasoner implements Reasoner {
+
     private WebView webView;
 
     private boolean loaded = false;
@@ -20,7 +23,7 @@ public class EyebrowReasoner implements Reasoner {
 
     private ReasonCmd cur;
 
-    public EyebrowReasoner(WebView webView, Context c) {
+    public EyeJsReasoner(WebView webView, Context c) {
         this.webView = webView;
 
         webView.getSettings().setJavaScriptEnabled(true);
@@ -28,19 +31,20 @@ public class EyebrowReasoner implements Reasoner {
         webView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
-                webView.evaluateJavascript("init();", (value) -> {
-                    // returns before init function is done
-                });
+//                webView.evaluateJavascript("init();", (value) -> {
+//                    // returns before init function is done
+//                });
             }
         });
+
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://192.168.1.101:8000/eyebrow/run.html");
-//        webView.loadUrl("file:///android_asset/eyebrow/run.html");
+        webView.loadUrl("http://192.168.1.101:8888/eye-js/perf-console.html");
+//        webView.loadUrl("file:///android_asset/eye-js/run.html");
     }
 
     @JavascriptInterface
     public void initDone() {
-        Log.d("android-rules", "[eyebrow] initDone()");
+        Log.d("android-rules", "[eye-js] initDone()");
 
         loaded = true;
         runNext();
@@ -58,18 +62,18 @@ public class EyebrowReasoner implements Reasoner {
         else {
             cur = cmd;
             webView.post(() -> {
-                Log.d("android-rules", "[eyebrow] code:\n" + cmd.getCode());
+                Log.d("android-rules", "[eye-js] code:\n" + cmd.getCode());
                 webView.evaluateJavascript("run(\"" + cmd.getCode() + "\");",
-                    (value) -> {
-                        // returns before function is done
-                    });
+                        (value) -> {
+                            // returns before function is done
+                        });
             });
         }
     }
 
     @JavascriptInterface
     public void runDone(String result, String error) {
-        Log.d("android-rules", "[eyebrow] runDone()");
+        Log.d("android-rules", "[eye-js] runDone()");
         if (error != null)
             cur.getListener().error(error);
         else
@@ -77,18 +81,4 @@ public class EyebrowReasoner implements Reasoner {
 
         runNext();
     }
-
-//    public class WebAppInterface {
-//        Context mContext;
-//
-//        /** Instantiate the interface and set the context */
-//        WebAppInterface(Context c) {
-//            mContext = c;
-//        }
-//
-//        @JavascriptInterface
-//        public void log(String msg) {
-//            Log.d("android-rules", "received from JS:\n" + msg);
-//        }
-//    }
 }
