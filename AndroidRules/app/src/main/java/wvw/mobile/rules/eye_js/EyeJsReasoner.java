@@ -1,15 +1,23 @@
 package wvw.mobile.rules.eye_js;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import wvw.mobile.rules.eyebrow.ReasonCmd;
 import wvw.mobile.rules.eyebrow.Reasoner;
@@ -30,16 +38,25 @@ public class EyeJsReasoner implements Reasoner {
         webView.addJavascriptInterface(this, "Caller");
         webView.setWebViewClient(new WebViewClient() {
 
+            @Override
             public void onPageFinished(WebView view, String url) {
 //                webView.evaluateJavascript("init();", (value) -> {
 //                    // returns before init function is done
 //                });
             }
+
+            @Override
+            @TargetApi(21)
+            // looks like we could load asset scripts this way
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                Log.w("android-rules", "request: " + request.getUrl());
+                // return ...
+                return null;
+            }
         });
 
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://192.168.1.101:8888/eye-js/perf-console.html");
-//        webView.loadUrl("file:///android_asset/eye-js/run.html");
+        webView.loadUrl("file:///android_asset/eye-js/perf-console-assets.html");
     }
 
     @JavascriptInterface

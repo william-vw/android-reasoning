@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<script src="./builds/eye-latest.js"></script>
+<script>
+    // <script type="module">
+    window.console = { 'log': console.log };
+
+    console.warn = function(msg) {
+        console.log(msg);
+    }
+
+    let start, end;
+
+    console.time = function(msg) {
+        start = performance.now();
+    }
+
+    console.timeEnd = function(msg) {
+        end = performance.now();
+
+        console.log(msg + " : " + (end - start));
+    }
+
+    // NOTE having CORS issues with this
+    // - load using import
+    /* console.time(`Loading eye script\t`);
+    let eyemod = await import("http://android_asset/eye-js/eye-latest-mod.js");
+    const { SwiplEye, queryOnce } = eyemod.eyereasoner;
+    console.timeEnd(`Loading eye script\t`); */
+
+    // - load using script tag
+    const { SwiplEye, queryOnce } = eyereasoner;
+
+    // - load from online
+    // import { queryOnce, SwiplEye } from 'https://eyereasoner.github.io/eye-js/2/latest/index.js';
+
+    async function main() {
+        let data =
+            `@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix : <http://example.org/socrates#>.
+:Socrates a :Human.
+:Human rdfs:subClassOf :Mortal.
+{?A rdfs:subClassOf ?B. ?S a ?A} => {?S a ?B}.`;
+
+        let query =
+            `@prefix : <http://example.org/socrates#>.
+{:Socrates a ?WHAT} => {:Socrates a ?WHAT}.`;
+
+        // Instantiate a new SWIPL module and log any results it produces to the console
+        console.time(`Initialise SWIPL with EYE image\t`);
+        const Module = await SwiplEye({ print: () => { } });
+        console.timeEnd(`Initialise SWIPL with EYE image\t`);
+
+        // Load the the strings data and query as files data.n3 and query.n3 into the module
+        console.time('Load data.n3\t\t');
+        Module.FS.writeFile('data.n3', data);
+        console.timeEnd('Load data.n3\t\t');
+
+        console.time('Load query.n3\t\t');
+        Module.FS.writeFile('query.n3', query);
+        console.timeEnd('Load query.n3\t\t');
+
+        console.time('Execute query\t\t');
+        queryOnce(Module, 'main', ['--nope', '--quiet', './data.n3', '--query', './query.n3']);
+        console.timeEnd('Execute query\t\t');
+
+        console.log()
+    }
+
+    function loaded() {
+        main();
+        console.log();
+
+        main();
+        console.log();
+
+        main();
+        console.log();
+
+        main();
+        console.log();
+
+        main();
+    }
+</script>
+
+</head>
+
+<body onload="loaded()">
+<!--<body>-->
+
+<div id="out"></div>
+
+</body>
+
+</html>
